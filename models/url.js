@@ -12,6 +12,11 @@ const urlSchema = new mongoose.Schema(
             required: true,
         },
         visitHistory: [{ timestamp: { type: Number } }],
+        expiresAt: {
+            type: Date,
+            default: Date.now(),
+            index: { expires: "300m" },
+        },
     },
     { timestamps: true }
 );
