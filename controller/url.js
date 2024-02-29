@@ -39,4 +39,17 @@ const handleGetUrl = async (req, res) => {
     }
 };
 
-module.exports = { handleGenerateUrl, handleGetUrl };
+//Handle Analytics Route
+const handleGetAnalytics = async (req, res) => {
+    try {
+        const shortId = req.params.shortId;
+        const result = await URL.findOne({ shortId });
+        return res
+            .status(200)
+            .json({ totalClick: result.visitHistory.length, analytics: result.visitHistory });
+    } catch (error) {
+        return res.status(404).send(`Cannot Get Analytics of URL : ${error}`);
+    }
+};
+
+module.exports = { handleGenerateUrl, handleGetUrl, handleGetAnalytics };
