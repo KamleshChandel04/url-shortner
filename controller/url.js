@@ -12,8 +12,9 @@ const handleGenerateUrl = async (req, res) => {
         const shortId = nanoid();
         await URL.create({
             shortId: shortId,
-            redirectURL: body.url,
+            redirectURL: body.url, 
             visitHistory: [],
+            createdBy : req.user._id,
         });
         console.log("Created");
         return res.status(201).render("home" , {

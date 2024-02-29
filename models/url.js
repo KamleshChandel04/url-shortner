@@ -17,6 +17,10 @@ const urlSchema = new mongoose.Schema(
             default: Date.now() + 5 * 60 * 60 * 1000, // 5 hours in milliseconds
             index: { expires: "5h" }, // TTL index for automatic deletion
         },
+        createdBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "user",
+        },
     },
     { timestamps: true }
 );

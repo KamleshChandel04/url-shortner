@@ -2,10 +2,14 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
+const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
+const { handleGetUrl } = require("./controller/url");
+const {auth , tempAuth} = require("./middleware/auth");
+
 const urlRoute = require("./routes/url");
 const staticRoutes = require("./routes/staticRoutes");
-const { handleGetUrl } = require("./controller/url");
+const userRoute = require("./routes/user");
 
 //config env file
 dotenv.config();
@@ -17,11 +21,13 @@ app.set("views", path.resolve("./views"));
 
 //Global Parsing Middleware
 app.use(express.json());
-app.use(express.urlencoded({extended : false}));
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 //Global Middleware
-app.use("/url", urlRoute);
-app.use("/" , staticRoutes);
+app.use("/url", auth , urlRoute);
+app.use("/user", userRoute);
+app.use("/", tempAuth , staticRoutes);
 
 //Redirect to actual Url
 app.get("/:shortId", handleGetUrl);
