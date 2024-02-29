@@ -8,7 +8,6 @@ const nanoid = customAlphabet("1234567890abcdef", 5);
 const handleGenerateUrl = async (req, res) => {
     const body = req.body;
     if (!body.url) return res.status(400).json({ error: "Url is required" });
-
     try {
         const shortId = nanoid();
         await URL.create({
@@ -17,7 +16,9 @@ const handleGenerateUrl = async (req, res) => {
             visitHistory: [],
         });
         console.log("Created");
-        return res.status(201).json({ id: shortId });
+        return res.status(201).render("home" , {
+            id : shortId,
+        });
     } catch (error) {
         return res.status(403).send(`Failed to Create ShortUrl : ${error}`);
     }

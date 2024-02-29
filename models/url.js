@@ -14,8 +14,8 @@ const urlSchema = new mongoose.Schema(
         visitHistory: [{ timestamp: { type: Number } }],
         expiresAt: {
             type: Date,
-            default: Date.now(),
-            index: { expires: "300m" },
+            default: Date.now() + 5 * 60 * 60 * 1000, // 5 hours in milliseconds
+            index: { expires: "5h" }, // TTL index for automatic deletion
         },
     },
     { timestamps: true }
