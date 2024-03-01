@@ -1,27 +1,20 @@
 const { getUser } = require("../utils/auth");
 
-const auth = async (req, res , next) => {
+const Authentication = async (req, res, next) => {
     const token = req.cookies?.token;
-
-    if (!token) {
-        return res.status(401).redirect("/signin");
-    }
-
+    req.user = null;
+    if (!token) return next();
     const user = getUser(token);
-    if (!user) {
-        alert("Unauthorized Acess , Login First!");
-        return res.status(401).redirect("/signin");
-    }
-
     req.user = user;
     next();
 };
 
-const tempAuth = async(req , res , next)=>{
-    const token = req.cookies?.token;
-    const user = getUser(token);
-    req.user = user;
-    next();
+function Authorization(roles = []) {
+    return function (req, res, next) {
+        if (!req.user) return res.status(401).redirect("/signin");
+        if (!roles.includes(req.user.role)) return res.status(401).json("UnAuthorized Access!");
+        next();
+    };
 }
 
-module.exports = {auth , tempAuth};
+module.exports = { Authentication, Authorization };

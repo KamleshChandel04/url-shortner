@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
 const { handleGetUrl } = require("./controller/url");
-const {auth , tempAuth} = require("./middleware/auth");
+const { Authentication, Authorization } = require("./middleware/auth");
 
 const urlRoute = require("./routes/url");
 const staticRoutes = require("./routes/staticRoutes");
@@ -23,11 +23,12 @@ app.set("views", path.resolve("./views"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(Authentication);
 
 //Global Middleware
-app.use("/url", auth , urlRoute);
+app.use("/url", Authorization(["NORMAL" , "ADMIN"]), urlRoute);
 app.use("/user", userRoute);
-app.use("/", tempAuth , staticRoutes);
+app.use("/", staticRoutes);
 
 //Redirect to actual Url
 app.get("/:shortId", handleGetUrl);
