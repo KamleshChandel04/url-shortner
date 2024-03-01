@@ -4,7 +4,11 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
     if(!req.user)
+    {    
+        console.log("you have to Login First!");
         return res.redirect("/signin");
+    }
+
     try {
         const allUrls = await URL.find({createdBy : req.user._id});
         return res.status(200).render("home", {

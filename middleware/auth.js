@@ -1,13 +1,13 @@
 const { getUser } = require("../utils/auth");
 
 const auth = async (req, res , next) => {
-    const userUid = req.cookies?.uid;
+    const token = req.cookies?.token;
 
-    if (!userUid) {
+    if (!token) {
         return res.status(401).redirect("/signin");
     }
 
-    const user = getUser(userUid);
+    const user = getUser(token);
     if (!user) {
         alert("Unauthorized Acess , Login First!");
         return res.status(401).redirect("/signin");
@@ -18,8 +18,8 @@ const auth = async (req, res , next) => {
 };
 
 const tempAuth = async(req , res , next)=>{
-    const userUid = req.cookies?.uid;
-    const user = getUser(userUid);
+    const token = req.cookies?.token;
+    const user = getUser(token);
     req.user = user;
     next();
 }

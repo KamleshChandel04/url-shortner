@@ -12,13 +12,15 @@ const handleGenerateUrl = async (req, res) => {
         const shortId = nanoid();
         await URL.create({
             shortId: shortId,
-            redirectURL: body.url, 
+            redirectURL: body.url,
             visitHistory: [],
-            createdBy : req.user._id,
+            createdBy: req.user._id,
         });
         console.log("Created");
-        return res.status(201).render("home" , {
-            id : shortId,
+        const allUrls = await URL.find({ createdBy: req.user._id });
+        return res.status(201).render("home", {
+            id: shortId,
+            urls: allUrls,
         });
     } catch (error) {
         return res.status(403).send(`Failed to Create ShortUrl : ${error}`);

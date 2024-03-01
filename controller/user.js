@@ -26,9 +26,9 @@ const handleSingIn = async (req, res) => {
                 error: "Invalid Email or Password",
             });
 
-        const sessionId = uuidv4();
-        setUser(sessionId, user);
-        res.cookie("uid", sessionId);
+        
+        const token = setUser(user);
+        res.cookie("token", token);
         return res.status(200).redirect("/");
     } catch (err) {
         return res.status(500).send(`Failed to Login User : ${err}`);
