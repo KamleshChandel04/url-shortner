@@ -26,9 +26,11 @@ const handleSingIn = async (req, res) => {
                 error: "Invalid Email or Password",
             });
 
-        
         const token = setUser(user);
-        res.cookie("token", token);
+        res.cookie("token", token, {
+            expires: new Date(Date.now() + 5 * 60 * 60 * 1000),
+            httpOnly: true,
+        });
         return res.status(200).redirect("/");
     } catch (err) {
         return res.status(500).send(`Failed to Login User : ${err}`);
